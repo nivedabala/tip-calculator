@@ -8,6 +8,8 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    let defaults = UserDefaults.standard
 
     
     @IBOutlet weak var billAmountTextField: UITextField!
@@ -29,7 +31,9 @@ class ViewController: UIViewController {
         
         let bill = Double(billAmountTextField.text!) ?? 0
         
-        let tipPercentages = [0.15, 0.18, 0.2]
+        
+        let tipPercentages = [ Double(defaults.float(forKey:"lowTipKey"))/100.0, Double(defaults.float(forKey:"medTipKey"))/100.0, Double(defaults.float(forKey:"highTipKey"))/100.0]
+        
         let tip = bill * tipPercentages[tipControl.selectedSegmentIndex]
         let total = bill + tip
         
@@ -41,14 +45,16 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("view will appear")
-        // This is a good place to retrieve the default tip percentage from UserDefaults
-        // and use it to update the tip amount
+        
+        tipControl.setTitle("\(defaults.integer(forKey: "lowTipKey"))%", forSegmentAt:0)
+        
+        tipControl.setTitle("\(defaults.integer(forKey: "medTipKey"))%", forSegmentAt:1)
+        
+        tipControl.setTitle("\(defaults.integer(forKey: "highTipKey"))%", forSegmentAt:2)
+        
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("view did appear")
-    }
+    
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
